@@ -1,0 +1,48 @@
+/* General Styling for Mark/Unmark Button */
+li .mark-button {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  font-weight: bold;
+}
+
+/* Hover Effect for Mark/Unmark Button */
+li .mark-button:hover {
+  color: #0056b3;
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Styling for Important Notes */
+li.important {
+  border-left: 4px solid #ffc107;
+  background-color: #fff9e6;
+}
+
+/* Additional Styling for Notes and Buttons */
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth highlight for important notes */
+li.important .mark-button {
+  color: #e0a800;
+}
+
+li.important .mark-button:hover {
+  color: #d39e00;
+}
