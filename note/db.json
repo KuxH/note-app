@@ -1,0 +1,14 @@
+{
+    "notes":[
+        {
+           "id" :1,
+           "value" : "HTML easy",
+           "important" : true
+        },
+        {
+            "id" : 2,
+            "value":"HTML easy",
+            "important":false
+        }
+    ]
+}
