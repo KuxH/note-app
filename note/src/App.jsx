@@ -1,9 +1,20 @@
-import { useState } from "react"
-
+import { useState, useEffect } from "react"
+import axios from 'axios'
 const App =() =>{
     const [notes,setNotes] = useState([]) 
     const[newNote, setNewNote] = useState('')
     const [showAll,setShowAll] = useState(true)
+
+    useEffect(()=>{
+        axios.get('http://localhost:3001/notes').then(response =>{
+            setNotes(response.data)
+            console.log(response)
+        })
+        .catch(error => console.error("Err",error))
+    
+        
+    }, [])
+
     const addNote= (event) =>{
         event.preventDefault()
         console.log(event.target.value)
