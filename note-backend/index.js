@@ -6,7 +6,10 @@ app.get('/',(request, response)=>{
 })
 
 app.get('/api/notes', (request,response) =>{
+    const id = request.params.id
+    const note = notes.find(note => note.id == id)
     response.json(notes)
+
 })
 
 const PORT =3001
