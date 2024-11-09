@@ -19,10 +19,17 @@ const App =() =>{
         event.preventDefault()
         console.log(event.target.value)
     const noteObj ={
-        id: notes.length +1,
         value: newNote,
         important: false
     }
+    axios
+    .post('http://localhost:3001/notes', noteObj)
+    .then(response => {
+        console.log(response)
+    })
+    .catch(error => {
+        console.log(error)
+    })
     setNotes(notes.concat(noteObj))
     setNewNote('')
     }
