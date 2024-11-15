@@ -7,6 +7,8 @@ const create = newObject =>{
     return axios.post(url, newObject)
 }
 
-const update = (id, newObject) =>{
-      
+const update = (id, newObject) => {
+    return axios.put(`${url}/${id}`, newObject)
 }
+
+export default {getAll, create, update}
