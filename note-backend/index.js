@@ -1,41 +1,60 @@
 const express = require('express')
 const app = express()
+require('dotenv').config();
+const Note = require('./models/note')
 
-const requestLogger = (request, response, next)=>{
+const requestLogger = (req, res, next) => {
     console.log('Method:', req.method)
     console.log('Path:', req.path)
     console.log('Body:', req.body)
-    console.log('------')
+    console.log('-------')
     next()
 }
 
 app.use(express.json())
+app.use(requestLogger)
 
-app.get('/',(request, response)=>{
-    response.send('<h1>hello world</h1>')
+let notes = [
+    {
+        id: 1,
+        content: "hello"
+    }
+]
+
+app.get('/', (req, res) => {
+    res.write('<h1>Hello world</h1>')
 })
 
-app.get('/api/notes/:id', (request,response) =>{
-    const id = request.params.id
-    const note = notes.find(note => note.id == id)
-    response.json(notes)
-
+app.get('/api/notes', (req, res) => {
+    Note.find({}).then(notes => {
+        res.json(notes)
+    })
 })
 
-app.delete('/api/notes:id',(request,response) =>{
-    const id = Number(request.parms.id)
-    notes = notes.filter(note => note.id !== id)
-    response.status(204).end()
+app.post('/api/persons', (req, res) => {
+    const note = req.body
+    const random = Math.floor(Math.random() * 3290329023)
+
+    if(note.number.length < 10){
+        return res.status(400).send({error: 'Error in number'})
+    }
+
+    const noteObj = {
+        id: random,
+    }
+    notes = notes.concat(noteObj)
+    console.log(notes)
+    res.json(noteObj)
 })
 
-app.post('/api/notes',(request,response)=>{
-    const note =request.body
-    console.log(note)
-    response.json(note)
+
+const unkown = (req, res, next) => {
+    res.status(404).send({error: 'Unknown endpoint'})
+    next()
+}
+app.use(unkown)
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
 })
-
-
-const PORT = 3001
-app.listen(PORT, ()=>{
-    console.log(`Server running on: ${PORT}`)
-}) 
