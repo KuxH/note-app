@@ -49,7 +49,17 @@ app.post('/api/notes', (req, res) => {
     })
 })
 
-
+app.get('/api/notes/:id', (req, res) => {
+    Note.findById(req.params.id).then(note => {
+        if (note) {
+            res.json(note)
+        } else {
+            res.status(404).end()
+        }
+    }).catch(error => {
+        res.status(400).send({error: 'ID invalid'})
+    })
+})
 const unkown = (req, res, next) => {
     res.status(404).send({error: 'Unknown endpoint'})
     next()
