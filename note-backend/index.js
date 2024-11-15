@@ -31,20 +31,22 @@ app.get('/api/notes', (req, res) => {
     })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/notes', (req, res) => {
     const note = req.body
-    const random = Math.floor(Math.random() * 3290329023)
-
-    if(note.number.length < 10){
-        return res.status(400).send({error: 'Error in number'})
+    
+    if (note.content === undefined) {
+        return res.status(400).json({
+            error: 'content missing'
+        })
     }
-
-    const noteObj = {
-        id: random,
-    }
-    notes = notes.concat(noteObj)
-    console.log(notes)
-    res.json(noteObj)
+    const newNote = new Note({
+        content: note.content,
+        important: note.important || false,
+      
+    })
+    newNote.save().then(savedNote => {
+        res.json(savedNote)
+    })
 })
 
 
