@@ -14,25 +14,21 @@ const requestLogger = (req, res, next) => {
 app.use(express.json())
 app.use(requestLogger)
 
-let notes = [
-    {
-        id: 1,
-        content: "hello"
-    }
-]
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     res.write('<h1>Hello world</h1>')
 })
 
-app.get('/api/notes', (req, res) => {
+app.get('/api/notes', (req, res, next) => {
     Note.find({}).then(notes => {
         res.json(notes)
     })
+    .catch(error => next(error))
 })
-
-app.post('/api/notes', (req, res) => {
-    const note = req.body
+ 
+app.post('/api/notes', (req, res, next) => {
+    console.log("post called")
+    const note = req.note
     
     if (note.content === undefined) {
         return res.status(400).json({
@@ -47,6 +43,7 @@ app.post('/api/notes', (req, res) => {
     newNote.save().then(savedNote => {
         res.json(savedNote)
     })
+    .catch(error => next(error))
 })
 
 app.get('/api/notes/:id', (req, res) => {
@@ -56,15 +53,19 @@ app.get('/api/notes/:id', (req, res) => {
         } else {
             res.status(404).end()
         }
-    }).catch(error => {
-        res.status(400).send({error: 'ID invalid'})
-    })
+    }).catch(error => next(error))
 })
-const unkown = (req, res, next) => {
+const unknown = (req, res, next) => {
     res.status(404).send({error: 'Unknown endpoint'})
     next()
 }
-app.use(unkown)
+app.use(unknown)
+
+const errorHandler = (error, req, res, next) =>{
+    console.error(error.name)
+    return res.status(404).end
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
