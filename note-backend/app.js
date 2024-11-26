@@ -19,9 +19,14 @@ mongoose
   });
 
 app.use(middleware.requestLogger);
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+app.use(express.json());
 
 const notesRouter = require("./controllers/note");
+const userRouter = require("./controllers/user");
+
 app.use("/api/notes", notesRouter);
+app.use("/api/users", userRouter);
+
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 module.exports = app;
