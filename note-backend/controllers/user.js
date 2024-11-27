@@ -14,6 +14,17 @@ userRouter.post("/", async (req, res, next) => {
     return res.status(400).json({ error: "missing username or password" });
   }
 
+  User.findOne({ username })
+    .then((existingUsername) => {
+      if (existingUsername) {
+        return res.status(400).json({ error: "username exists" });
+      } else {
+        return res.json({ message: "valid username" });
+      }
+    })
+    .catch((error) => next(error));
+  // user.save();
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hashSync(password, saltRounds);
 
@@ -27,4 +38,20 @@ userRouter.post("/", async (req, res, next) => {
     .then((savedUser) => res.json(savedUser))
     .catch((error) => next(error));
 });
+
+// return error if username occupied in realtime
+userRouter.post("/check-username", async (req, res, next) => {
+  const { username } = req.body;
+  User.findOne({ username })
+    .then((existingUsername) => {
+      if (existingUsername) {
+        return res.status(400).json({ error: "username exists" });
+      } else {
+        return res.json({ message: "valid username" });
+      }
+    })
+    .catch((error) => next(error));
+  
+});
+
 module.exports = userRouter;
