@@ -23,9 +23,12 @@ app.use(express.json());
 
 const notesRouter = require("./controllers/note");
 const userRouter = require("./controllers/user");
+const loginRouter = require("./controllers/login");
 
 app.use("/api/notes", notesRouter);
 app.use("/api/users", userRouter);
+app.use("/api/login", loginRouter);
+
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
