@@ -11,7 +11,7 @@ userRouter.get("/", async (req, res, next) => {
 
 userRouter.post("/", async (req, res, next) => {
   const { username, name, password } = req.body;
-  if (username === undefined || name === undefined || password === undefined) {
+  if (!username || !name || !password) {
     return res.status(400).json({ error: "missing username or password" });
   }
 

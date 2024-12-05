@@ -1,14 +1,26 @@
-import axios from "axios";
-const url = 'http://localhost:3001/notes'
-const getAll = ()=>{
-    return axios.get(url)
+import axios from "axios"
+const url = "http://localhost:3001/api/notes"
+
+let token = null
+
+const noteService = {
+  setToken(newToken) {
+    token = `Bearer ${newToken}`
+  },
+
+  async getAll() {
+    const request = await axios.get(url)
+    return request.data
+  },
+
+  async create(obj) {
+    const config = {
+      headers: { Authorization: token },
     }
-const create = newObject =>{
-    return axios.post(url, newObject)
+
+    const res = await axios.post(url, obj, config)
+    return res.data
+  },
 }
 
-const update = (id, newObject) => {
-    return axios.put(`${url}/${id}`, newObject)
-}
-
-export default {getAll, create, update}
+export default noteService
