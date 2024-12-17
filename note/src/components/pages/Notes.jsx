@@ -16,6 +16,7 @@ const Note = ({ note, handleChange }) => {
 const Notes = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("")
+  const [errMessage, setErrMessage] = useState(null)
 
   useEffect(() => {
     noteService
@@ -38,10 +39,12 @@ const Notes = () => {
       const note = await noteService.create(noteObj)
       setNotes(notes.concat(note))
       setNewNote("")
-    } catch(ex){ setErrMessage("Can't create Note")
+    } catch (ex) {
+      setErrMessage("Can't create Note")
       setTimeout(() => {
         setErrMessage(null)
-      }, 5000)}
+      }, 5000)
+    }
   }
 
   const handleChange = (id) => {
