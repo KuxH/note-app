@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
 import noteService from "../../services/notes"
+import loginService from "../../services/login"
+import { Table, Form, Button } from "react-bootstrap"
 
 const Note = ({ note, handleChange }) => {
   const label = note.important ? "make unimportant" : "make important"
   return (
-    <li>
-      {note.content} <button onClick={handleChange}>{label}</button>
-    </li>
+    <p>
+      {note.content}
+      {""}
+    </p>
   )
 }
 
@@ -37,7 +40,10 @@ const Notes = () => {
       setNewNote("")
     } catch (e) {
       console.log(e)
-    }
+    } catch(ex){ setErrMessage("Can't create Note")
+      setTimeout(() => {
+        setErrMessage(null)
+      }, 5000)}
   }
 
   const handleChange = (id) => {
@@ -57,26 +63,36 @@ const Notes = () => {
   }
 
   return (
-    <div>
-      <h1>Notes</h1>
-      <form onSubmit={handleSubmit}>
-        Note:
-        <input
+    <div className="mt-4">
+      <h1 className="my-2">Notes</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Label>Enter a new note</Form.Label>
+        <Form.Control
+          name="note"
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
           type="text"
         />
-        <input type="submit" value="Submit" />
-      </form>
-      <ul>
-        {notes.map((note) => (
-          <Note
-            key={note.id}
-            note={note}
-            handleChange={() => handleChange(note.id)}
-          />
-        ))}
-      </ul>
+        <Button className="mt-2" variant="primary" type="submit">
+          Create
+        </Button>
+      </Form>
+      <Table stripe size="sm">
+        <thead>
+          <tr>
+            <th>Content</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          {notes.map((note) => (
+            <tr key={note.id}>
+              <td>{note.content}</td>
+              <td>{note.user ? note.user.name : "unknown"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

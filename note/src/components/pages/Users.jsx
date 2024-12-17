@@ -3,41 +3,15 @@ import { Routes, Route, Link, useNavigate } from "react-router-dom"
 import loginService from "../../services/login"
 import noteService from "../../services/notes"
 import userService from "../../services/user"
+import login from "../../services/login"
 
 const Users = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [user, setUser] = useState(null)
-  const [errMessage, setErrMessage] = useState(null)
+
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
-
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
-      noteService.setToken(user.token)
-      setUser(user)
-      setUsername("")
-      setPassword("")
-      navigate("/")
-    } catch (e) {
-      setErrMessage("Invalid username or password")
-      setTimeout(() => {
-        setErrMessage(null)
-      }, 5000)
-    }
-  }
 
   const handleRegister = async (e) => {
     e.preventDefault()
@@ -72,9 +46,9 @@ const Users = () => {
   }
 
   return (
-    <div>
-      <h1>User Page</h1>
-      <Notification message={errMessage} />
+    <div className="mt-4">
+      <h1 className="mt-2">User Page</h1>
+
       {user ? (
         <div>
           <p>
@@ -82,14 +56,14 @@ const Users = () => {
           </p>
         </div>
       ) : (
-        <nav>
+        <navigate>
           <Link style={padding} to="login">
             Login
           </Link>
           <Link style={padding} to="register">
             Register
           </Link>
-        </nav>
+        </navigate>
       )}
 
       <Routes>
