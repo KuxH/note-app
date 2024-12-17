@@ -38,8 +38,6 @@ const Notes = () => {
       const note = await noteService.create(noteObj)
       setNotes(notes.concat(note))
       setNewNote("")
-    } catch (e) {
-      console.log(e)
     } catch(ex){ setErrMessage("Can't create Note")
       setTimeout(() => {
         setErrMessage(null)
